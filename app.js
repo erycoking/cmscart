@@ -22,10 +22,11 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.send('working');
+  res.render('index');
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
+const env = process.env.NODE_ENV || 'production';
 app.listen(port, () => {
-  console.log(`Server started at port:${port}...`);
+  console.info(`Server running on http://localhost:${port} [${env}]`);
 });

@@ -4,8 +4,9 @@
   "description": "shopping cart application",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon",
     "build": "webpack --mode=development",
+    "postinstall": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
