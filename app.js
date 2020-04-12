@@ -24,6 +24,9 @@ app.use(logger('dev'))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// set global variable
+app.locals.errors = null;
+
 // Set Up public folder
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -5,8 +5,12 @@ const {Schemas} = require('./helpers/validation-helpers');
 const Page = require('../models/page');
 
 module.exports = {
-  index: async (req, res, next) => {
-    res.status(200).json('working');
+  index: (req, res, next) => {
+    Page.find({}).sort({ sorting: 1}).exec((err, page) => {
+      res.render('admin/pages', {
+        pages: page
+      })
+    });
   },
 
   addPageForm: async (req, res, next) => {
@@ -18,7 +22,7 @@ module.exports = {
     });
   },
 
-  addPage: async (req, res, next) => {
+  addPage: (req, res, next) => {
     const { error, value } = Schemas.pageSchema.validate(req.body);
     if (error) {
       console.log(error);
@@ -33,6 +37,7 @@ module.exports = {
         if (page) {
           req.flash('danger', 'slug is already in use');
           res.render('admin/add_page', {
+            errors: null,
             title: value.title,
             slug: value.slug,
             content: value.content
@@ -40,9 +45,9 @@ module.exports = {
         } else {
           page = new Page({
             title: value.title,
-            slug: value.slug,
+            slug: (value.slug !== '') ? value.slug.replace(/\s+/g, '-').toLowerCase() : value.title.replace(/\s+/g, '-').toLowerCase(),
             content: value.content,
-            sorting: 0
+            sorting: 100
           });
 
           page.save((err) => {
