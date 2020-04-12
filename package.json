@@ -19,6 +19,7 @@
   "author": "Erick Loningo Lomunyak",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
     "connect-flash": "^0.1.1",
@@ -26,7 +27,6 @@
     "express": "^4.17.1",
     "express-messages": "^1.0.1",
     "express-session": "^1.17.0",
-    "express-validator": "^6.4.0",
     "jquery": "^3.5.0",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",

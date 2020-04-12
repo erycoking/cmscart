@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- include bootstrap -->
+    <script src="/js/bundle.js"></script>
+
     <title>Dashboard</title>
   </head>
   <body>
@@ -43,3 +46,11 @@
 
     <div class="container">
       <%- messages('messages', locals) %>
+
+      <% if (errors) { %>
+        <% errors.forEach(err => { %>
+         <div class="alert alert-danger">
+           <%= err.message %> 
+         </div> 
+        <% }) %>
+       <% } %>

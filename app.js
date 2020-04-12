@@ -52,12 +52,12 @@ app.use((req, res, next) => {
 
 // configure all routes
 // admin routes
-const adminPages = require('./routes/admin_pages.js');
-app.use('/admin', adminPages);
+const adminRoutes = require('./routes/admin-routes.js');
+app.use('/admin/pages', adminRoutes);
 
 // user routes
-const userPages = require('./routes/pages.js');
-app.use('/', userPages);
+const userRoutes = require('./routes/user-routes.js');
+app.use('/', userRoutes);
 
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'production';
