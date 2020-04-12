@@ -3,6 +3,10 @@ A shopping cart application
 
 ## Developed using
   - Nodejs
-  - Expressj
+  - Expressjs
+  - MongoDB
   - Ejs
+
+### Configurations 
+  - webpack
 
