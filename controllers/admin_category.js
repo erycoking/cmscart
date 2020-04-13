@@ -32,7 +32,7 @@ module.exports = {
         if (cat) {
           req.flash('danger', 'Category already exists');
           res.render('admin/categories/add_category', {
-            title: value.title,
+            title: req.body.title,
           });
         } else {
           cat = new Category({
@@ -41,12 +41,11 @@ module.exports = {
           });
 
           cat.save((err) => {
-            if (err) {
+            if (err) 
               req.flash('danger', err);
-            } else {
-              req.flash('success', 'Category added successfully!');
-              res.redirect('/admin/categories');
-            }
+              
+            req.flash('success', 'Category added successfully!');
+            res.redirect('/admin/categories');
           });
         }
       });
@@ -82,9 +81,9 @@ module.exports = {
         if (cat) {
           req.flash('danger', 'Category already in exists');
           res.render('admin/categories/edit_category', {
-            title: value.title,
+            title: req.body.title,
             slug: req.params.slug,
-            id: value.id
+            id: req.body.id
           });
         } else {
           Category.findById({ _id: value.id}, (err, cat) => {
@@ -95,12 +94,11 @@ module.exports = {
             cat.slug = value.title.replace(/\s+/g, '-').toLowerCase();
 
             cat.save((err) => {
-              if (err) {
+              if (err) 
                 req.flash('danger', err);
-              } else {
-                req.flash('success', 'Category updated successfully!');
-                res.redirect(`/admin/categories/edit-category/${cat.slug}`);
-              }
+                
+              req.flash('success', 'Category updated successfully!');
+              res.redirect(`/admin/categories/edit-category/${cat.slug}`);
             });
           });
         }
@@ -114,8 +112,8 @@ module.exports = {
       if (err)
         return console.log(err);
 
-        req.flash('success', 'Category deleted successfully!');
-        res.redirect(`/admin/categories`);
+      req.flash('success', 'Category deleted successfully!');
+      res.redirect(`/admin/categories`);
     });
   }
 }

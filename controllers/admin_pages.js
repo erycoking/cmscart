@@ -56,9 +56,9 @@ module.exports = {
         if (page) {
           req.flash('danger', 'slug already in use');
           res.render('admin/pages/add_page', {
-            title: value.title,
-            slug: value.slug,
-            content: value.content
+            title: req.body.title,
+            slug: req.body.slug,
+            content: req.body.content
           });
         } else {
           page = new Page({
@@ -69,12 +69,11 @@ module.exports = {
           });
 
           page.save((err) => {
-            if (err) {
+            if (err) 
               req.flash('danger', err);
-            } else {
-              req.flash('success', 'Page added successfully!');
-              res.redirect('/admin/pages');
-            }
+
+            req.flash('success', 'Page added successfully!');
+            res.redirect('/admin/pages');
           });
         }
       });
@@ -111,9 +110,9 @@ module.exports = {
         if (page) {
           req.flash('danger', 'slug already in use');
           res.render('admin/pages/edit_page', {
-            title: value.title,
-            slug: value.slug,
-            content: value.content,
+            title: req.body.title,
+            slug: req.body.slug,
+            content: req.body.content,
             id: req.params.id
           });
         } else {
@@ -126,12 +125,11 @@ module.exports = {
             page.content = value.content;
   
             page.save((err) => {
-              if (err) {
+              if (err) 
                 req.flash('danger', err);
-              } else {
-                req.flash('success', 'Page updated successfully!');
-                res.redirect(`/admin/pages/edit-page/${page._id}`);
-              }
+
+              req.flash('success', 'Page updated successfully!');
+              res.redirect(`/admin/pages/edit-page/${page._id}`);
             });
           });
         }
@@ -145,8 +143,8 @@ module.exports = {
       if (err)
         return console.log(err);
 
-        req.flash('success', 'Page deleted successfully!');
-        res.redirect(`/admin/pages`);
+      req.flash('success', 'Page deleted successfully!');
+      res.redirect(`/admin/pages`);
     });
   }
 }

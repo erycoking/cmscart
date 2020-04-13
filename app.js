@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const expressMessages = require('express-messages');
+const fileUpload = require('express-fileupload');
 
 // setting up database
 const mongoose = require('mongoose');
@@ -31,6 +32,9 @@ app.use('/assets', [
   express.static(__dirname + '/node_modules/jquery-ui-dist/'),
   express.static(__dirname + '/node_modules/@ckeditor/ckeditor5-build-classic/')
 ]);
+
+// Express fileupload middleware
+app.use(fileUpload());
 
 // body parser middleware
 //parse application/x-www-form-urlencoded
@@ -64,6 +68,10 @@ app.use('/admin/pages', adminPagesRoutes);
 // admin category routes
 const adminCategoriesRoutes = require('./routes/admin_categories_routes.js');
 app.use('/admin/categories', adminCategoriesRoutes);
+
+// admin category routes
+const adminProductsRoutes = require('./routes/admin_products_routes.js');
+app.use('/admin/products', adminProductsRoutes);
 
 // user routes
 const userRoutes = require('./routes/user_routes.js');
