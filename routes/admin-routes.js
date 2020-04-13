@@ -31,7 +31,6 @@ router.route('/edit-page/:slug')
 /**
  * Deleting pages
  */
-router.route('/delete-page/:id')
-  .post(AdminController.delete);
+router.route('/delete-page/:id').get(AdminController.delete);
 
 module.exports = router;

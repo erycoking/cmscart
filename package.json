@@ -19,6 +19,7 @@
   "author": "Erick Loningo Lomunyak",
   "license": "ISC",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^18.0.0",
     "@hapi/joi": "^17.1.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",

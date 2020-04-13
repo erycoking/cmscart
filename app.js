@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', [
   express.static(__dirname + '/node_modules/jquery/dist/'),
   express.static(__dirname + '/node_modules/jquery-ui-dist/'),
+  express.static(__dirname + '/node_modules/@ckeditor/ckeditor5-build-classic/')
 ]);
 
 // body parser middleware

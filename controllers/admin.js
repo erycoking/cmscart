@@ -34,7 +34,7 @@ module.exports = {
     }
   },
 
-  read: async (req, res, next) => {
+  read: (req, res, next) => {
     return res.render('admin/add_page', {
       errors: null,
       title: '',
@@ -141,6 +141,13 @@ module.exports = {
   },
 
   delete: (req, res, next) => {
+    console.log(req.params);
+    Page.findByIdAndDelete(req.params.id, (err) => {
+      if (err)
+        return console.log(err);
 
+        req.flash('success', 'Page deleted successfully!');
+        res.redirect(`/admin/pages`);
+    });
   }
 }
