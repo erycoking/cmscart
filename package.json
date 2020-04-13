@@ -4,9 +4,9 @@
   "description": "shopping cart application",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon",
-    "build": "webpack --mode=development",
-    "postinstall": "webpack",
+    "start": "set NODE_ENV=development && nodemon",
+    "build": "webpack --mode=development --config webpack.config.js",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -28,6 +28,7 @@
     "express-messages": "^1.0.1",
     "express-session": "^1.17.0",
     "jquery": "^3.5.0",
+    "jquery-ui-dist": "^1.12.1",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "popper.js": "^1.16.1"

@@ -8,7 +8,7 @@ const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const connectFlash = require('connect-flash');
+const flash = require('connect-flash');
 const expressMessages = require('express-messages');
 
 // setting up database
@@ -24,11 +24,12 @@ app.use(logger('dev'))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// set global variable
-app.locals.errors = null;
-
 // Set Up public folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets', [
+  express.static(__dirname + '/node_modules/jquery/dist/'),
+  express.static(__dirname + '/node_modules/jquery-ui-dist/'),
+]);
 
 // body parser middleware
 //parse application/x-www-form-urlencoded
@@ -40,13 +41,13 @@ app.use(bodyParser.json());
 // express session middleware
 app.use(session({
   secret: 'awesome coders',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: false }
 }));
 
 // express message middleware
-app.use(connectFlash());
+app.use(flash());
 app.use((req, res, next) => {
   res.locals.messages = expressMessages(req, res);
   next();

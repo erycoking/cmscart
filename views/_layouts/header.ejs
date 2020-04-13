@@ -7,6 +7,7 @@
 
     <!-- include bootstrap -->
     <script src="/js/bundle.js"></script>
+    <script src="/assets/jquery.min.js"></script>
 
     <title>Dashboard</title>
   </head>
@@ -46,11 +47,3 @@
 
     <div class="container">
       <%- messages('messages', locals) %>
-
-      <% if (errors) { %>
-        <% errors.forEach(err => { %>
-         <div class="alert alert-danger">
-           <%= err.message %> 
-         </div> 
-        <% }) %>
-       <% } %>
