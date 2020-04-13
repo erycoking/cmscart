@@ -56,12 +56,17 @@ app.use((req, res, next) => {
 
 
 // configure all routes
-// admin routes
-const adminRoutes = require('./routes/admin-routes.js');
-app.use('/admin/pages', adminRoutes);
+
+// admin pages routes
+const adminPagesRoutes = require('./routes/admin_pages_routes.js');
+app.use('/admin/pages', adminPagesRoutes);
+
+// admin category routes
+const adminCategoriesRoutes = require('./routes/admin_categories_routes.js');
+app.use('/admin/categories', adminCategoriesRoutes);
 
 // user routes
-const userRoutes = require('./routes/user-routes.js');
+const userRoutes = require('./routes/user_routes.js');
 app.use('/', userRoutes);
 
 const port = process.env.PORT || 3000;

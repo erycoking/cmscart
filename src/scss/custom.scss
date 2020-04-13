@@ -1,9 +1,17 @@
-.sorting {
-  tr:not(.home) {
-    cursor: pointer;
+html {
+  .sorting {
+    tr:not(.home) {
+      cursor: pointer;
+    }
+  
+    .ui-state-highlight {
+      border: 1px dashed #ccc;
+    }
   }
-
-  .ui-state-highlight {
-    border: 1px dashed #ccc;
+  
+  .ck-editor__main {
+    .ck-content {
+      min-height: 10em;
+    }
   }
 }

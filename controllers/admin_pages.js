@@ -7,7 +7,7 @@ const Page = require('../models/page');
 module.exports = {
   index: (req, res, next) => {
     Page.find({}).sort({ sorting: 1}).exec((err, page) => {
-      res.render('admin/pages', {
+      res.render('admin/pages/pages', {
         pages: page
       })
     });
@@ -34,20 +34,19 @@ module.exports = {
     }
   },
 
-  read: (req, res, next) => {
-    return res.render('admin/add_page', {
-      errors: null,
+  create: (req, res, next) => {
+    return res.render('admin/pages/add_page', {
       title: '',
       slug: '',
       content: ''
     });
   },
 
-  create: (req, res, next) => {
+  add: (req, res, next) => {
     const { error, value } = Schemas.pageSchema.validate(req.body);
     if (error) {
       req.flash('danger', error.details[0].message);
-      res.render('admin/add_page', {
+      res.render('admin/pages/add_page', {
         title: req.body.title,
         slug: req.body.slug,
         content: req.body.content
@@ -56,7 +55,7 @@ module.exports = {
       Page.findOne({slug: req.body.slug}, (err, page) => {
         if (page) {
           req.flash('danger', 'slug already in use');
-          res.render('admin/add_page', {
+          res.render('admin/pages/add_page', {
             title: value.title,
             slug: value.slug,
             content: value.content
@@ -83,11 +82,11 @@ module.exports = {
   },
 
   edit: (req, res, next) => {
-    Page.findOne({ slug: req.params.slug}, (err, page) => {
+    Page.findOne({ _id: req.params.id}, (err, page) => {
       if (err) 
         return console.log(err);
 
-      res.render('admin/edit_page', {
+      res.render('admin/pages/edit_page', {
         title: page.title,
         slug: page.slug,
         content: page.content,
@@ -100,25 +99,25 @@ module.exports = {
     const { error, value } = Schemas.editPageSchema.validate(req.body);
     if (error) {
       req.flash('danger', error.details[0].message);
-      res.render('admin/edit_page', {
+      res.render('admin/pages/edit_page', {
         title: req.body.title,
         slug: req.body.slug,
         content: req.body.content,
-        id: req.body.id
+        id: req.params.id
       });
 
     } else {
-      Page.findOne({slug: req.body.slug, _id: { '$ne':req.body.id }}, (err, page) => {
+      Page.findOne({slug: req.body.slug, _id: { '$ne':req.params.id }}, (err, page) => {
         if (page) {
           req.flash('danger', 'slug already in use');
-          res.render('admin/edit_page', {
+          res.render('admin/pages/edit_page', {
             title: value.title,
             slug: value.slug,
             content: value.content,
-            id: value.id
+            id: req.params.id
           });
         } else {
-          Page.findById({ _id: value.id}, (err, page) => {
+          Page.findById({ _id: req.params.id}, (err, page) => {
             if (err) 
               return console.log(err);
 
@@ -130,8 +129,8 @@ module.exports = {
               if (err) {
                 req.flash('danger', err);
               } else {
-                req.flash('success', 'Page added successfully!');
-                res.redirect(`/admin/pages/edit-page/${page.slug}`);
+                req.flash('success', 'Page updated successfully!');
+                res.redirect(`/admin/pages/edit-page/${page._id}`);
               }
             });
           });

@@ -55,6 +55,15 @@ module.exports = {
       id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
     }),
 
+    CategoriesSchema: Joi.object({
+      title: Joi.string().min(3).max(100).required()
+    }),
+
+    EditCategoriesSchema: Joi.object({
+      title: Joi.string().min(3).max(100).required(),
+      id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    }),
+
     idSchema: Joi.object({
       param: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
     })
