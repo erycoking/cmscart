@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const resizeImg = require('resize-img');
 
 
-// get page model
+// get product model
 const Product = require('../models/product');
 
 // get Category model
@@ -36,7 +36,7 @@ module.exports = {
     Category.find((err, cats) => {
       return res.render('admin/products/add_product', {
         title: '',
-        desc: '',
+        description: '',
         categories: cats,
         price: ''
       });
@@ -54,7 +54,7 @@ module.exports = {
       Category.find((err, cats) => {
         res.render('admin/products/add_product', {
           title: req.body.title,
-          desc: req.body.desc,
+          description: req.body.description,
           category: req.body.category,
           categories: cats,
           price: req.body.price
@@ -65,7 +65,7 @@ module.exports = {
       Category.find((err, cats) => {
         res.render('admin/products/add_product', {
           title: req.body.title,
-          desc: req.body.desc,
+          description: req.body.description,
           category: req.body.category,
           categories: cats,
           price: req.body.price
@@ -78,7 +78,7 @@ module.exports = {
           Category.find((err, cats) => {
             res.render('admin/products/add_product', {
               title: req.body.title,
-              desc: req.body.desc,
+              description: req.body.description,
               category: req.body.category,
               categories: cats,
               price: req.body.price
@@ -88,9 +88,9 @@ module.exports = {
           product = new Product({
             title: value.title,
             slug: value.title.replace(/\s+/g, '-').toLowerCase(),
-            desc: value.desc,
+            description: value.description,
             category: value.category,
-            price: value.price,
+            price: parseFloat(value.price).toFixed(2),
             image: imageFile
           });
 
@@ -125,56 +125,186 @@ module.exports = {
   },
 
   edit: (req, res, next) => {
-    Page.findOne({ _id: req.params.id}, (err, page) => {
+
+    let errors = null;
+    if (req.session.errors) {
+      errors = req.session.errors;
+    }
+    req.session.erros = null;
+
+    Category.find((err, cats) => {
       if (err) 
         return console.log(err);
 
-      res.render('admin/pages/edit_page', {
-        title: page.title,
-        slug: page.slug,
-        content: page.content,
-        id: page._id
+      Product.findById(req.params.id, (err, product) => {
+        if (err) 
+          return console.log(err);
+
+        const gallery = `public/product_images/${product._id}/gallery`;
+        let galleryImages = null;
+
+        fs.readdir(gallery, (err, files) => {
+          if (err) {
+            console.log(err);
+          } else {
+            galleryImages = files;
+          }
+
+          return res.render('admin/products/edit_product', {
+            errors: errors,
+            title: product.title,
+            description: product.description,
+            category: product.category.replace(/\s+/g, '-').toLowerCase(),
+            categories: cats,
+            price: product.price,
+            image: '',
+            currentImage: product.image,
+            id: product._id,
+            galleryImages: galleryImages
+          });
+        });
       });
-    });
+    })
   },
 
   update: (req, res, next) => {
-    const { error, value } = Schemas.editPageSchema.validate(req.body);
+    const imageAvailable = req.files !== null && req.files.image !== undefined ? true : false;
+    const imageFile = imageAvailable ? req.files.image.name : '';
+    const { error, value } = Schemas.ProductSchema.validate(req.body);
+    const imageCheck = imageAvailable ? Schemas.isValidImage(req.files.image) : false;
+
     if (error) {
       req.flash('danger', error.details[0].message);
-      res.render('admin/pages/edit_page', {
-        title: req.body.title,
-        slug: req.body.slug,
-        content: req.body.content,
-        id: req.params.id
-      });
+      Category.find((err, cats) => {
+        Product.findById(req.params.id, (err, product) => {
+          if (err) 
+            return console.log(err);
+  
+          const gallery = `public/product_images/${product._id}/gallery`;
+          let galleryImages = null;
 
+          fs.readdir(gallery, (err, files) => {
+            if (err) {
+              console.log(err);
+            } else {
+              galleryImages = files;
+            }
+
+            res.render('admin/products/edit_product', {
+              title: req.body.title,
+              description: req.body.description,
+              category: req.body.category,
+              categories: cats,
+              price: req.body.price,
+              image: '',
+              currentImage: product.image,
+              id: product._id,
+              galleryImages: galleryImages
+            });
+          });
+        });
+      });
+    } else if(imageCheck) {
+      req.flash('danger', 'Invalid image, only .jpg, .jpeg and .png images allowed, max upload size is 5mb');
+      Category.find((err, cats) => {
+        Product.findById(req.params.id, (err, product) => {
+          if (err) 
+            return console.log(err);
+  
+          const gallery = `public/product_images/${product._id}/gallery`;
+          let galleryImages = null;
+
+          fs.readdir(gallery, (err, files) => {
+            if (err) {
+              console.log(err);
+            } else {
+              galleryImages = files;
+            }
+
+            res.render('admin/products/edit_product', {
+              title: req.body.title,
+              description: req.body.description,
+              category: req.body.category,
+              categories: cats,
+              price: req.body.price,
+              image: '',
+              currentImage: product.image,
+              id: product._id,
+              galleryImages: galleryImages
+            });
+          });
+        });
+      });
     } else {
-      Page.findOne({slug: req.body.slug, _id: { '$ne':req.params.id }}, (err, page) => {
-        if (page) {
-          req.flash('danger', 'slug already in use');
-          res.render('admin/pages/edit_page', {
-            title: value.title,
-            slug: value.slug,
-            content: value.content,
-            id: req.params.id
+      const slug = value.title.replace(/\s+/g, '-').toLowerCase();
+      Product.findOne({slug: slug, _id: { '$ne':req.params.id }}, (err, product) => {
+        if (product) {
+          req.flash('danger', 'Product title exists, choose another');
+          Category.find((err, cats) => {
+
+            const gallery = `public/product_images/${product._id}/gallery`;
+            let galleryImages = null;
+
+            fs.readdir(gallery, (err, files) => {
+              if (err) {
+                console.log(err);
+              } else {
+                galleryImages = files;
+              }
+
+              res.render('admin/products/edit_product', {
+                title: req.body.title,
+                description: req.body.description,
+                category: req.body.category,
+                categories: cats,
+                price: req.body.price,
+                image: '',
+                currentImage: product.image,
+                id: product._id,
+                galleryImages: galleryImages
+              });
+            });
           });
         } else {
-          Page.findById({ _id: req.params.id}, (err, page) => {
+          Product.findById(req.params.id, (err, product) => {
             if (err) 
               return console.log(err);
 
-            page.title = value.title;
-            page.slug = (value.slug !== '') ? value.slug.replace(/\s+/g, '-').toLowerCase() : value.title.replace(/\s+/g, '-').toLowerCase();
-            page.content = value.content;
+            const oldFileName = product.image;
+
+            product.title = value.title;
+            product.slug = slug;
+            product.description = value.description;
+            product.category = value.category;
+            product.image = (imageAvailable) ? imageFile : oldFileName;
+            product.price = parseFloat(value.price).toFixed(2);
   
-            page.save((err) => {
-              if (err) {
+            product.save((err) => {
+              if (err) 
                 req.flash('danger', err);
-              } else {
-                req.flash('success', 'Page updated successfully!');
-                res.redirect(`/admin/pages/edit-page/${page._id}`);
+  
+              if (imageAvailable) {
+
+                const oldImagePath = './public/product_images/' + product._id + '/' + oldFileName;
+                fs.remove(oldImagePath)
+                  .then(() => { return console.log('old image successfully deleted.'); })
+                  .catch((e) => { return console.log(e); });
+
+                const productImage = req.files.image;
+                const imagePath = './public/product_images/' + product._id + '/' + imageFile;
+  
+                productImage.mv(imagePath).then(() => {
+                  console.log('new image successfully uploaded.');
+                }).catch((err) => {
+                  console.log('=============================');
+                  console.log(err);
+                  console.log('=============================');
+                  return;
+                });
               }
+  
+              req.flash('success', 'Product updated successfully!');
+              res.redirect(`/admin/products/edit-product/${product._id}`);
             });
           });
         }
@@ -183,12 +313,63 @@ module.exports = {
   },
 
   delete: (req, res, next) => {
-    Product.findByIdAndDelete(req.params.id, (err) => {
-      if (err)
-        return console.log(err);
 
-        req.flash('success', 'Product deleted successfully!');
-        res.redirect(`/admin/products`);
+    const id = req.params.id;
+    const path = `public/product_images/${id}`;
+
+    fs.remove(path, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        Product.findByIdAndDelete(req.params.id, (err) => {
+          if (err)
+            return console.log(err);
+    
+            req.flash('success', 'Product deleted successfully!');
+            res.redirect(`/admin/products`);
+        });
+      }
+    });
+  },
+
+  addImageToGallery: (req, res, next) => {
+    const productIMage = req.files.file;
+    const id = req.params.id;
+    const path = `./public/product_images/${id}/gallery/${productIMage.name}`; 
+    const thumbsPath = `./public/product_images/${id}/gallery/thumbs/${productIMage.name}`;
+
+    productIMage.mv(path).then(() => {
+      console.log('image uploaded to gallery');
+      resizeImg(fs.readFileSync(path), { width: 100, height: 100 }).then((buff) => {
+        console.log('thumbnails sucessfully created.');
+        fs.writeFileSync(thumbsPath, buff);
+      })
+    }).catch((err) => {
+      console.log(err);
+    });
+
+    res.sendStatus(200);
+  },
+
+  deleteImageFromGallery: (req, res, next) => {
+    const image = req.params.image;
+    const id = req.query.id;
+    const originalIMage = `./public/product_images/${id}/gallery/${image}`; 
+    const thumbsImage = `./public/product_images/${id}/gallery/thumbs/${image}`;
+
+    fs.remove(originalIMage, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        fs.remove(thumbsImage, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            req.flash('success', 'Image successfully deleted!');
+            res.redirect(`/admin/products/edit-product/${id}`);
+          }
+        });
+      }
     });
   }
 }

@@ -19,8 +19,31 @@ html {
     margin: 20px;
   }
 
+  #currentImgPreview {
+    margin: 20px;
+  }
+
+  .new-image {
+    display: none;
+  }
+
   .productImage {
     width: 100px;
     height: 100px;
   }
+
+  ul.gallery {
+    padding: 0;
+  }
+
+  ul.gallery li:first-child {
+    margin-left: 0;
+  }
+
+  ul.gallery li {
+    margin: 20px;
+    display: inline-block;
+    list-style: none;
+  }
+  
 }

@@ -7,7 +7,7 @@
   <form action="/admin/categories/edit-category/<%= slug %>" method="POST">
     <div class="form-group">
       <label for="title">Title</label>
-      <input id="title" class="form-control" type="text" value="<%= title %>" placeholder="Title" name="title">
+      <input id="title" class="form-control" type="text" value="<%= title %>" required placeholder="Title" name="title">
     </div>
 
     <input type="hidden" name="id" value="<%= id %>">

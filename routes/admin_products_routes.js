@@ -28,4 +28,14 @@ router.route('/edit-product/:id')
  */
 router.route('/delete-product/:id').get(AdminProductsController.delete);
 
+/**
+ * Adding images to gallery
+ */
+router.route('/product-gallery/:id').post(AdminProductsController.addImageToGallery);
+
+/**
+ * Deleting images from gallery
+ */
+router.route('/delete-image/:image').get(AdminProductsController.deleteImageFromGallery);
+
 module.exports = router;

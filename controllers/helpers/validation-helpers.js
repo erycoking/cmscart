@@ -67,7 +67,7 @@ module.exports = {
 
     ProductSchema: Joi.object({
       title: Joi.string().min(3).max(100).required(),
-      desc: Joi.string().min(3).max(1000).required(),
+      description: Joi.string().min(3).max(1000).required(),
       slug: Joi.string().min(3).max(20).allow(''),
       category: Joi.string().min(3).max(100).required(),
       price: Joi.number().precision(2).positive().required()
