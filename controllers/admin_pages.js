@@ -4,6 +4,30 @@ const {Schemas} = require('./helpers/validation-helpers');
 // get page model
 const Page = require('../models/page');
 
+const sortPages = (ids, callback) => {
+  let count = 0;
+  
+  for(let i = 0; i < ids.length; i++) {
+    const id = ids[i];
+    count++;
+
+    (function(count) {
+      Page.findById(id, (err, page) => {
+        page.sorting = count;
+        page.save((err) => {
+          if(err) 
+            return console.log(err);
+
+          ++count;
+          if (count >= ids.length) {
+            callback();
+          }
+        })
+      });
+    })(count);
+  }
+};
+
 module.exports = {
   index: (req, res, next) => {
     Page.find({}).sort({ sorting: 1}).exec((err, page) => {
@@ -16,22 +40,14 @@ module.exports = {
   reorderPages: (req, res, next) => {
     const ids = req.body['id[]'];
 
-    let count = 0;
-    
-    for(let i = 0; i < ids.length; i++) {
-      const id = ids[i];
-      count++;
-
-      (function(count) {
-        Page.findById(id, (err, page) => {
-          page.sorting = count;
-          page.save((err) => {
-            if(err) 
-              return console.log(err);
-          })
-        });
-      })(count);
-    }
+    sortPages(ids, () => {
+      Page.find({}).sort({ sorting: 1}).exec((err, pages) => {
+        if (err)
+          console.log(err);
+        else 
+          req.app.locals.pages = pages;
+      });
+    });
   },
 
   create: (req, res, next) => {
@@ -71,6 +87,13 @@ module.exports = {
           page.save((err) => {
             if (err) 
               req.flash('danger', err);
+
+            Page.find({}).sort({ sorting: 1}).exec((err, pages) => {
+              if (err)
+                console.log(err);
+              else 
+                req.app.locals.pages = pages;
+            });
 
             req.flash('success', 'Page added successfully!');
             res.redirect('/admin/pages');
@@ -128,6 +151,13 @@ module.exports = {
               if (err) 
                 req.flash('danger', err);
 
+              Page.find({}).sort({ sorting: 1}).exec((err, pages) => {
+                if (err)
+                  console.log(err);
+                else 
+                  req.app.locals.pages = pages;
+              });
+
               req.flash('success', 'Page updated successfully!');
               res.redirect(`/admin/pages/edit-page/${page._id}`);
             });
@@ -142,6 +172,13 @@ module.exports = {
     Page.findByIdAndDelete(req.params.id, (err) => {
       if (err)
         return console.log(err);
+
+      Page.find({}).sort({ sorting: 1}).exec((err, pages) => {
+        if (err)
+          console.log(err);
+          else 
+          req.app.locals.pages = pages;
+      });
 
       req.flash('success', 'Page deleted successfully!');
       res.redirect(`/admin/pages`);

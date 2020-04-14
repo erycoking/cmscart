@@ -59,7 +59,16 @@ app.use((req, res, next) => {
 });
 
 
-// configure all routes
+// get page Model
+const Page = require('./models/page');
+
+// load all pages
+Page.find().sort({sorting: 1}).exec((err, pages) => {
+  if (err)
+    console.log(err);
+  else
+    app.locals.pages = pages;
+});
 
 // admin pages routes
 const adminPagesRoutes = require('./routes/admin_pages_routes.js');
