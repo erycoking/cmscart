@@ -40,7 +40,7 @@
               <% if (page.slug === 'home') { %>
                 <a class="nav-link" href="/"><%= page.title %> </a>
               <% } else { %>
-                <a class="nav-link" href="<%= page.slug %>"><%= page.title %> </a>
+                <a class="nav-link" href="/<%= page.slug %>"><%= page.title %> </a>
               <% } %>
             </li>
            <% }) %>
@@ -56,6 +56,23 @@
               <% } %>
             )</a>
           </li>
+          <% if (user) { %>
+            <li class="nav-item">
+              <a href="/auth/logout" class="nav-link">Hi, <%= user.username %> ( logout )</a>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a href="/auth/register" class="nav-link">Register</a>
+            </li>
+            <li class="nav-item">
+              <a href="/auth/login" class="nav-link">Login</a>
+            </li>
+          <% } %>
+          <% if (user && user.admin === 1) { %>
+            <li class="nav-item">
+              <a href="/admin/pages" class="nav-link">Admin Area</a>
+            </li>
+          <% } %>
         </ul>
         <!-- <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">

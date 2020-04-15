@@ -1,0 +1,30 @@
+<%- include('_layouts/header') %>
+  
+  <h1><%= title %> </h1>
+
+  <form action="/auth/register" method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" class="form-control" value="<%= name %>" type="text" name="name">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" class="form-control" value="<%= email %>" type="email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" class="form-control" value="<%= username %>" type="text" name="username">
+    </div>
+    <div class="form-group">
+      <label for="password">password</label>
+      <input id="password" class="form-control" value="<%= password%>" type="password" name="password">
+    </div>
+    <div class="form-group">
+      <label for="cpassword">Confirm Passord</label>
+      <input id="cpassword" class="form-control" value="<%= cpassword %>" type="password" name="cpassword">
+    </div>
+
+    <button class="btn btn-primary" type="submit">Register</button>
+  </form>
+
+<%- include('_layouts/footer') %>

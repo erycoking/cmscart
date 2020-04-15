@@ -1,5 +1,16 @@
 const Joi = require('@hapi/joi');
+// const passwordComplexity = require('joi-password-complexity');
 const path = require('path');
+
+// const complexityOptions = {
+//   min: 10,
+//   max: 30,
+//   lowerCase: 1,
+//   upperCase: 1,
+//   numeric: 1,
+//   symbol: 1,
+//   requirementCount: 2,
+// }
 
 module.exports = {
   validateParams: (schema, name) => {
@@ -80,6 +91,19 @@ module.exports = {
       category: Joi.string().min(3).max(100).required(),
       price: Joi.number().precision(2).positive().required(),
       id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    }),
+
+    UserSchema: Joi.object({
+      name: Joi.string().min(2).max(30).required(),
+      email: Joi.string().email().required(),
+      username: Joi.string().min(2).max(30).required(),
+      password: Joi.string().min(3).max(30).required(),
+      cpassword: Joi.any().valid(Joi.ref('password')).required()
+    }),
+
+    UserCredentialsSchema: Joi.object({
+      username: Joi.string().min(2).max(30).required(),
+      password: Joi.string().min(3).max(30).required(),
     }),
 
     isValidImage: (image) => {

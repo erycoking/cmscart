@@ -11,6 +11,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const expressMessages = require('express-messages');
 const fileUpload = require('express-fileupload');
+const passport = require('passport');
+const passportConfig = require('./config/passport');
 
 // setting up database
 const mongoose = require('mongoose');
@@ -58,9 +60,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// passport config
+passportConfig(passport);
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // add cart as a global variable
 app.use((req, res, next) => {
   res.locals.cart = req.session.cart;
+  res.locals.user = req.user || null;
   next();
 });
 
@@ -108,7 +117,11 @@ app.use('/cart', cartRoutes);
 
 // user routes
 const userRoutes = require('./routes/user_routes.js');
-app.use('/', userRoutes);
+app.use('/auth', userRoutes);
+
+// page routes
+const pageRoutes = require('./routes/page_routes.js');
+app.use('/', pageRoutes);
 
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'production';

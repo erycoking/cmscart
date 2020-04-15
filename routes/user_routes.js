@@ -4,14 +4,23 @@ const router = express.Router();
 const UserController = require('../controllers/user.js');
 
 /**
- * Get home page
+ * Registration
  */
-router.route('/').get(UserController.index);
+router.route('/register')
+  .get(UserController.getRegistrationPage)  // display login page
+  .post(UserController.register); // register user
 
 /**
- * Get Other pages
+ * Authentication
  */
-router.route('/:slug').get(UserController.getPage);
+router.route('/login')
+  .get(UserController.getLogin)
+  .post(UserController.login);
+
+/**
+ * Logout
+ */
+router.route('/logout').get(UserController.logout)
 
 // export
 module.exports = router;

@@ -33,7 +33,8 @@ module.exports = {
 
   getProductDetails: (req, res, next) => {
 
-    let galleryImages = null
+    let galleryImages = null;
+    const isLoggedIn = req.isAuthenticated();
 
     Product.findOne({ slug: req.params.product }, (err, p) => {
       if (err)
@@ -49,7 +50,8 @@ module.exports = {
         res.render('products', {
           title: p.title,
           p: p,
-          galleryImages: galleryImages
+          galleryImages: galleryImages,
+          isLoggedIn: isLoggedIn
         })
       })
     })

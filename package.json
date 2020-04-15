@@ -21,6 +21,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^18.0.0",
     "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
     "connect-flash": "^0.1.1",
@@ -30,11 +31,14 @@
     "express-messages": "^1.0.1",
     "express-session": "^1.17.0",
     "fs-extra": "^9.0.0",
+    "joi-password-complexity": "^4.1.0",
     "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.12.1",
     "mkdirp": "^1.0.4",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "popper.js": "^1.16.1",
     "resize-img": "^2.0.0"
   },
