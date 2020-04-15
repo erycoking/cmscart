@@ -110,5 +110,10 @@ module.exports = {
     req.flash('success', 'Cart cleared!');
     res.redirect('/cart/checkout');
   },
+
+  buynow: (req, res, next) => {
+    delete req.session.cart;
+    res.sendStatus(200);
+  },
   
 }

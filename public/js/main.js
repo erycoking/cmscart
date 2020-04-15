@@ -18,4 +18,13 @@ $(function () {
       return false;
     }
   });
+
+  $('.buynow').on('click', (e) => {
+    e.preventDefault();
+
+    $.get('/cart/buynow', () => {
+      $('form.pp input[type=image]').click();
+      $('.ajaxbg').show();
+    });
+  });
 });

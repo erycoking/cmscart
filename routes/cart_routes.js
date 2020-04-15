@@ -28,5 +28,10 @@ router.route('/update/:product').get(CartController.updateCart);
  */
 router.route('/clear').get(CartController.clearCart);
 
+/**
+ * Get buynow
+ */
+router.route('/buynow').get(CartController.buynow);
+
 // export
 module.exports = router;

@@ -2,48 +2,64 @@
   <% if (cart) { %>
   <h1 class="page-title">My Cart</h1>
   <br>
-   <table class="table table-striped alignMiddle">
-     <thead>
-       <tr>
-         <th>Image</th>
-         <th>Title</th>
-         <th>Price</th>
-         <th>Quantity</th>
-         <th></th>
-         <th>Subtotal</th>
-       </tr>
-     </thead>
-     <tbody>
-        <% let total = 0 %> 
-        <% cart.forEach(c => { %>
-        <% const sub = parseFloat(c.qty * c.price).toFixed(2) %> 
-        <% total += +sub %> 
+    <table class="table table-striped alignMiddle">
+      <thead>
         <tr>
-          <td><img src="<%= c.image %>" alt="" class="productImage"></td>
-          <td><%= c.title %></td>
-          <td>$<%= parseFloat(c.price).toFixed(2) %></td>
-          <td><%= c.qty %></td>
-          <td>
-            <a href="/cart/update/<%= c.title %>?action=add">+</a>&nbsp;
-            <a href="/cart/update/<%= c.title %>?action=remove">-</a>&nbsp;
-            <a href="/cart/update/<%= c.title %>?action=clear">clear</a>
-          </td>
-          <td>$<%= sub %></td>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th></th>
+          <th>Subtotal</th>
         </tr>
-        <% }) %>
-        <tr>
-          <td colspan="6" class='text-right'><b>Total:</b> $<%= parseFloat(total).toFixed(2) %></td>
-        </tr>
-        <tr>
-          <td colspan="5" class='text-right'>
-            <a href="/cart/clear" class="btn btn-danger clearcart">Clear cart</a>
-          </td>
-          <td colspan="5" class='text-right'>
-            <a href="#" class="btn btn-primary buynow">But now</a>
-          </td>
-        </tr>
-     </tbody>
-   </table>
+      </thead>
+      <tbody>
+          <% let total = 0 %> 
+          <% cart.forEach(c => { %>
+          <% const sub = parseFloat(c.qty * c.price).toFixed(2) %> 
+          <% total += +sub %> 
+          <tr>
+            <td><img src="<%= c.image %>" alt="" class="productImage"></td>
+            <td><%= c.title %></td>
+            <td>$<%= parseFloat(c.price).toFixed(2) %></td>
+            <td><%= c.qty %></td>
+            <td>
+              <a href="/cart/update/<%= c.title %>?action=add">+</a>&nbsp;
+              <a href="/cart/update/<%= c.title %>?action=remove">-</a>&nbsp;
+              <a href="/cart/update/<%= c.title %>?action=clear">clear</a>
+            </td>
+            <td>$<%= sub %></td>
+          </tr>
+          <% }) %>
+          <tr>
+            <td colspan="6" class='text-right'><b>Total:</b> $<%= parseFloat(total).toFixed(2) %></td>
+          </tr>
+          <tr>
+            <td colspan="5" class='text-right'>
+              <a href="/cart/clear" class="btn btn-danger clearcart">Clear cart</a>
+            </td>
+            <td colspan="5" class='text-right'>
+              <a href="#" class="btn btn-primary buynow">But now</a>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    <!-- <input type="hidden" name="cmd" value="_ext-enter"> -->
+    <form class="pp" action="https://www.sandbox.paypal.com/us/cgi-bin/webscr" method="post">
+      <input type="hidden" name="cmd" value="_cart">
+      <input type="hidden" name="upload" value="1">
+      <input type="hidden" name="business" value="sb-ih8ip1453136@business.example.com">
+      <% let num = 0; %> 
+      <% cart.forEach(c => { %>
+        <% num++ %> 
+        <input type="hidden" name="item_name_<%= num %>" value="<%= c.title %>">
+        <input type="hidden" name="amount_<%= num %>" value="<%= c.price %>">
+        <input type="hidden" name="quantity_<%= num %>" value="<%= c.qty %>">
+      <% }) %>
+      <input type="hidden" name="currency_code" value="USD">
+      <input type="hidden" name="amount" value="<%= total %>">
+      <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+    </form>
   <% } else { %>
     <h3 class="text-center">Your cart is empty.</h3>
   <% } %>
