@@ -47,11 +47,12 @@ html {
   }
 
   img {
-    .pimage {
-      width: 150px;
+    &.pimage {
+      width: 150px !important;
+      max-width: 150px !important;
     }
 
-    .spi {
+    &.spi {
       width: 100%;
     }
   }
@@ -68,6 +69,10 @@ html {
       margin-top: 20px;
       margin-bottom: 20px;
     }
+  }
+
+  table.alignMiddle td {
+    vertical-align: middle !important;
   }
   
 }

@@ -58,6 +58,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// add cart as a global variable
+app.use((req, res, next) => {
+  res.locals.cart = req.session.cart;
+  next();
+});
+
 // get category Model
 const Category = require('./models/category');
 
@@ -95,6 +101,10 @@ app.use('/admin/products', adminProductsRoutes);
 // product routes
 const productRoutes = require('./routes/product_routes.js');
 app.use('/products', productRoutes);
+
+// cart routes
+const cartRoutes = require('./routes/cart_routes.js');
+app.use('/cart', cartRoutes);
 
 // user routes
 const userRoutes = require('./routes/user_routes.js');

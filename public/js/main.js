@@ -12,4 +12,10 @@ $(function () {
       return false;
     }
   });
+
+  $('a.clearcart').on('click', () => {
+    if (!confirm('Are you sure you want to clear your cart?')) {
+      return false;
+    }
+  });
 });
