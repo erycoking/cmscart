@@ -57,13 +57,13 @@ module.exports = {
     pageSchema: Joi.object({
       title: Joi.string().min(3).max(100).required(),
       slug: Joi.string().min(3).max(20).allow(''),
-      content: Joi.string().min(3).max(500).required(),
+      content: Joi.string().min(3).max(50000).required(),
     }),
 
     editPageSchema: Joi.object({
       title: Joi.string().min(3).max(100).required(),
       slug: Joi.string().min(3).max(20).allow(''),
-      content: Joi.string().min(3).max(500).required(),
+      content: Joi.string().min(3).max(50000).required(),
       id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
     }),
 

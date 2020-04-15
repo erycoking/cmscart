@@ -14,6 +14,11 @@ const fileUpload = require('express-fileupload');
 const passport = require('passport');
 const passportConfig = require('./config/passport');
 
+// Access control
+const auth = require('./config/auth');
+const isAdmin = auth.isAdmin;
+
+
 // setting up database
 const mongoose = require('mongoose');
 const config = require('./config/database');
@@ -97,15 +102,15 @@ Page.find().sort({sorting: 1}).exec((err, pages) => {
 
 // admin pages routes
 const adminPagesRoutes = require('./routes/admin_pages_routes.js');
-app.use('/admin/pages', adminPagesRoutes);
+app.use('/admin/pages', isAdmin, adminPagesRoutes);
 
 // admin category routes
 const adminCategoriesRoutes = require('./routes/admin_categories_routes.js');
-app.use('/admin/categories', adminCategoriesRoutes);
+app.use('/admin/categories', isAdmin, adminCategoriesRoutes);
 
 // admin category routes
 const adminProductsRoutes = require('./routes/admin_products_routes.js');
-app.use('/admin/products', adminProductsRoutes);
+app.use('/admin/products', isAdmin, adminProductsRoutes);
 
 // product routes
 const productRoutes = require('./routes/product_routes.js');
