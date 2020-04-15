@@ -43,6 +43,13 @@ module.exports = {
           cat.save((err) => {
             if (err) 
               req.flash('danger', err);
+
+            Category.find((err, categories) => {
+              if (err)
+                console.log(err);
+              else
+                req.app.locals.categories = categories;
+            });
               
             req.flash('success', 'Category added successfully!');
             res.redirect('/admin/categories');
@@ -96,6 +103,13 @@ module.exports = {
             cat.save((err) => {
               if (err) 
                 req.flash('danger', err);
+
+              Category.find((err, categories) => {
+                if (err)
+                  console.log(err);
+                else
+                  req.app.locals.categories = categories;
+              });
                 
               req.flash('success', 'Category updated successfully!');
               res.redirect(`/admin/categories/edit-category/${cat.slug}`);
@@ -111,6 +125,13 @@ module.exports = {
     Category.findByIdAndDelete(req.params.id, (err) => {
       if (err)
         return console.log(err);
+
+      Category.find((err, categories) => {
+        if (err)
+          console.log(err);
+        else
+          req.app.locals.categories = categories;
+      });
 
       req.flash('success', 'Category deleted successfully!');
       res.redirect(`/admin/categories`);

@@ -58,6 +58,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// get category Model
+const Category = require('./models/category');
+
+// load all pages
+Category.find((err, categories) => {
+  if (err)
+    console.log(err);
+  else
+    app.locals.categories = categories;
+});
 
 // get page Model
 const Page = require('./models/page');
@@ -81,6 +91,10 @@ app.use('/admin/categories', adminCategoriesRoutes);
 // admin category routes
 const adminProductsRoutes = require('./routes/admin_products_routes.js');
 app.use('/admin/products', adminProductsRoutes);
+
+// product routes
+const productRoutes = require('./routes/product_routes.js');
+app.use('/products', productRoutes);
 
 // user routes
 const userRoutes = require('./routes/user_routes.js');
