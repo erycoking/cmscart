@@ -13,5 +13,10 @@ router.route('/').get(ProductController.index);
  */
 router.route('/:c_slug').get(ProductController.getProductsByCategory);
 
+/**
+ * Get products details
+ */
+router.route('/:category/:product').get(ProductController.getProductDetails);
+
 // export
 module.exports = router;

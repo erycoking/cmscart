@@ -1,5 +1,4 @@
-const Joi = require('@hapi/joi');
-const {Schemas} = require('./helpers/validation-helpers');
+const fs = require('fs-extra');
 
 // get product model
 const Product = require('../models/product');
@@ -31,4 +30,28 @@ module.exports = {
       });
     });
   },
+
+  getProductDetails: (req, res, next) => {
+
+    let galleryImages = null
+
+    Product.findOne({ slug: req.params.product }, (err, p) => {
+      if (err)
+        console.log(err);
+
+      const path = `./public/product_images/${p._id}/gallery`;
+      fs.readdir(path, (err, files) => {
+        if (err)
+          console.log(err);
+
+        galleryImages = files;
+
+        res.render('products', {
+          title: p.title,
+          p: p,
+          galleryImages: galleryImages
+        })
+      })
+    })
+  }
 }
